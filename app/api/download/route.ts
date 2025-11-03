@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const binaryPath = getYtDlpPath();
-    const cookieArgs = getYtDlpCookieArgs();
+    const cookieArgs = await getYtDlpCookieArgs();
 
     // Generate temporary filename
     const timestamp = Date.now();

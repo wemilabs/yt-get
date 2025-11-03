@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     // Use yt-dlp to fetch video info and formats (fast & reliable)
     const binaryPath = getYtDlpPath();
-    const cookieArgs = getYtDlpCookieArgs();
+    const cookieArgs = await getYtDlpCookieArgs();
 
     try {
       const { stdout } = await execa(binaryPath, [
