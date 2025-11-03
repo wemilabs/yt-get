@@ -1,4 +1,5 @@
 {
+  "installCommand": "YOUTUBE_DL_SKIP_PYTHON_CHECK=true pnpm install",
   "build": {
     "env": {
       "YOUTUBE_DL_SKIP_PYTHON_CHECK": "true"
