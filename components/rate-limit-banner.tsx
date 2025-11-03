@@ -9,7 +9,6 @@ type RateLimitBannerProps = {
 };
 
 export function RateLimitBanner({ remaining, total, resetTime }: RateLimitBannerProps) {
-  const percentage = (remaining / total) * 100;
   const isLow = remaining <= 2;
   
   const formatResetTime = (timestamp: number) => {

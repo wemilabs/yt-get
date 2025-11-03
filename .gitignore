@@ -44,12 +44,3 @@ next-env.d.ts
 
 # binaries
 /bin
-
-# cookies
-cookies.txt
-cookies-base64.txt
-cookies-youtube.txt
-cookies-youtube-base64.txt
-.env.local
-
-.vercel

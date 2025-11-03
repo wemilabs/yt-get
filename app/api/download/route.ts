@@ -9,7 +9,6 @@ import { db } from "@/db/drizzle";
 import { rateLimits, videoHistory } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { getFfmpegPath, getYtDlpPath } from "@/lib/binaries";
-import { getYtDlpCookieArgs, cleanupCookiesFile } from "@/lib/cookies";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 // Initialize global progress map
@@ -70,7 +69,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const binaryPath = getYtDlpPath();
-    const cookieArgs = await getYtDlpCookieArgs();
 
     // Generate temporary filename
     const timestamp = Date.now();
@@ -91,7 +89,6 @@ export async function GET(request: NextRequest) {
       "--no-warnings",
       "--ffmpeg-location",
       ffmpegBinaryPath,
-      ...cookieArgs,
     ];
 
     // Configure based on type
@@ -166,7 +163,6 @@ export async function GET(request: NextRequest) {
       url,
       "--dump-single-json",
       "--no-warnings",
-      ...cookieArgs,
     ]);
     const info = JSON.parse(infoJson);
 
@@ -264,8 +260,5 @@ export async function GET(request: NextRequest) {
       { error: error instanceof Error ? error.message : "Download failed" },
       { status: 500 }
     );
-  } finally {
-    // Clean up temporary cookies file
-    cleanupCookiesFile();
   }
 }
