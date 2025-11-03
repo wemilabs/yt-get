@@ -1,6 +1,6 @@
+import { eq } from "drizzle-orm";
 import { db } from "@/db/drizzle";
 import { rateLimits } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export const RATE_LIMIT_CONFIG = {
   free: {

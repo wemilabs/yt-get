@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 /**
  * Get the ffmpeg binary path for the current platform
@@ -20,7 +20,9 @@ export function getFfmpegPath(): string {
 
   if (!packageName) {
     throw new Error(
-      `Unsupported platform: ${platform}-${arch}. Supported platforms: ${Object.keys(packageMap).join(", ")}`
+      `Unsupported platform: ${platform}-${arch}. Supported platforms: ${Object.keys(
+        packageMap
+      ).join(", ")}`
     );
   }
 
@@ -46,14 +48,5 @@ export function getYtDlpPath(): string {
   const platform = process.platform;
   const binaryName = platform === "win32" ? "yt-dlp.exe" : "yt-dlp";
 
-  return path.join(
-    process.cwd(),
-    "node_modules",
-    ".pnpm",
-    "yt-dlp-exec@1.0.2",
-    "node_modules",
-    "yt-dlp-exec",
-    "bin",
-    binaryName
-  );
+  return path.join(process.cwd(), "bin", binaryName);
 }
