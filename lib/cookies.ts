@@ -3,8 +3,17 @@ import { join } from "node:path";
 
 /**
  * Get the path to the temporary cookies file for yt-dlp
+ * Uses /tmp on serverless (Vercel) since filesystem is read-only
  */
 export function getCookiesFilePath(): string {
+  // Use /tmp on serverless environments (only writable directory)
+  const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+  
+  if (isServerless) {
+    return "/tmp/youtube-cookies.txt";
+  }
+  
+  // Use .next locally for development
   return join(process.cwd(), ".next", "youtube-cookies.txt");
 }
 
