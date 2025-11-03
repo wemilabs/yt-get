@@ -22,8 +22,9 @@ if (platform === "win32") {
     "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos";
   binaryName = "yt-dlp";
 } else {
+  // Use standalone Linux binary (not Python script)
   downloadUrl =
-    "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp";
+    "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux";
   binaryName = "yt-dlp";
 }
 
