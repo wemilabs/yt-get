@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { execa } from "execa";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { getYtDlpPath } from "@/lib/binaries";
+import { getYtDlpCookieArgs, cleanupCookiesFile } from "@/lib/cookies";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -61,27 +62,33 @@ export async function POST(request: NextRequest) {
 
     // Use yt-dlp to fetch video info and formats (fast & reliable)
     const binaryPath = getYtDlpPath();
+    const cookieArgs = getYtDlpCookieArgs();
 
-    const { stdout } = await execa(binaryPath, [
-      url,
-      "--dump-single-json",
-      "--no-check-certificates",
-      "--no-warnings",
-      "--prefer-free-formats",
-      "--add-header", "referer:youtube.com",
-      "--add-header", "user-agent:Mozilla/5.0",
-    ]);
+    try {
+      const { stdout } = await execa(binaryPath, [
+        url,
+        "--dump-single-json",
+        "--no-check-certificates",
+        "--no-warnings",
+        "--prefer-free-formats",
+        "--add-header", "referer:youtube.com",
+        "--add-header", "user-agent:Mozilla/5.0",
+        ...cookieArgs,
+      ]);
 
-    const info = JSON.parse(stdout);
+      const info = JSON.parse(stdout);
+      const result = processYtdlpResponse(info);
 
-    const result = processYtdlpResponse(info);
-
-    return NextResponse.json(result, {
-      headers: {
-        "X-RateLimit-Remaining": rateLimit.remaining.toString(),
-        "X-RateLimit-Reset": rateLimit.resetTime.toString(),
-      },
-    });
+      return NextResponse.json(result, {
+        headers: {
+          "X-RateLimit-Remaining": rateLimit.remaining.toString(),
+          "X-RateLimit-Reset": rateLimit.resetTime.toString(),
+        },
+      });
+    } finally {
+      // Clean up temporary cookies file
+      cleanupCookiesFile();
+    }
   } catch (error) {
     console.error("Error analyzing video:", error);
     return NextResponse.json(

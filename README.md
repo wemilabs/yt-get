@@ -76,13 +76,25 @@ cp .env.example .env.local
 # Edit .env.local with your configuration
 ```
 
-4. **Run the development server**
+4. **Set up YouTube cookies** (Required for Vercel deployment)
+
+```bash
+# Extract YouTube cookies to bypass bot detection
+node scripts/extract-cookies.js
+
+# This will automatically update .env.local
+# For Vercel deployment, see SETUP_COOKIES.md
+```
+
+5. **Run the development server**
 
 ```bash
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to start using YT-Get.
+
+> **Note:** YouTube cookie authentication is required to bypass bot detection. See [SETUP_COOKIES.md](./SETUP_COOKIES.md) for detailed setup instructions.
 
 ## 🛠️ Tech Stack
 
@@ -120,12 +132,13 @@ yt-get/
 ### Available Scripts
 
 ```bash
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm lint         # Run code quality checks
-pnpm format       # Format code with Biome
-pnpm db:push      # Push database schema changes
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+pnpm lint             # Run code quality checks
+pnpm format           # Format code with Biome
+pnpm db:push          # Push database schema changes
+pnpm cookies:extract  # Extract YouTube cookies for authentication
 ```
 
 ### Code Quality
